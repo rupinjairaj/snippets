@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -19,10 +18,6 @@ func NewFirestoreTagRepo() TagRepository {
 }
 
 func (r *firestoreTagRepo) Save(tagName string) (*entity.Tag, error) {
-
-	if tagName == "" {
-		return nil, errors.New("Tag name not provided.")
-	}
 
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
@@ -60,10 +55,6 @@ func (r *firestoreTagRepo) Save(tagName string) (*entity.Tag, error) {
 }
 
 func (r *firestoreTagRepo) FindByName(tagName string) (*entity.Tag, error) {
-
-	if tagName == "" {
-		return nil, errors.New("Tag name not provided.")
-	}
 
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
