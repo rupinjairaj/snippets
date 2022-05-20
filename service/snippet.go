@@ -17,6 +17,12 @@ type snippetSer struct {
 	snippetRepo repository.SnippetRepository
 }
 
+func NewSnippetService(repo repository.SnippetRepository) SnippetService {
+	return &snippetSer{
+		snippetRepo: repo,
+	}
+}
+
 func (ss *snippetSer) Validate(snippet *entity.SnippetClient) error {
 	if snippet.Content == "" {
 		return errors.New("Snippet does not contain any Content.")
