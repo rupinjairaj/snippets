@@ -26,6 +26,6 @@ func (c *chiRouter) Post(uri string, f func(response http.ResponseWriter, reques
 }
 
 func (c *chiRouter) Serve(port string) {
-	log.Println("Chi HTTP server running on port %v\n", port)
+	log.Printf("Chi HTTP server running on port %v\n", port)
 	http.ListenAndServe(port, c.chiDispatcher)
 }
