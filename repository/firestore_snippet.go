@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"log"
 	"math/rand"
 
@@ -22,25 +21,7 @@ func NewFirestoreSnippetRepo(firestoreTagRepo TagRepository) SnippetRepository {
 	}
 }
 
-func (r *firestoreSnippetRepo) Validate(snippet *entity.SnippetClient) error {
-
-	if snippet.Content == "" {
-		return errors.New("Snippet does not contain any Content.")
-	}
-	if len(snippet.Tags) <= 0 {
-		return errors.New("Snippet does not contain any Tags.")
-	}
-	return nil
-}
-
 func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.SnippetFirestore, error) {
-
-	// validate incoming snippet
-	err := r.Validate(snippet)
-	if err != nil {
-		log.Printf("Snippet validation failed: %v", err)
-		return nil, err
-	}
 
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
@@ -82,10 +63,6 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 }
 
 func (r *firestoreSnippetRepo) FindByTag(tagName string) ([]entity.SnippetFirestore, error) {
-
-	if tagName == "" {
-		return nil, errors.New("Tag name not provided.")
-	}
 
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
