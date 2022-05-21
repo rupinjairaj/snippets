@@ -45,12 +45,14 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 
 	newSnippet := &entity.SnippetFirestore{
 		Id:      rand.Int63(),
+		Name:    snippet.Name,
 		TagIds:  tagIds,
 		Content: snippet.Content,
 	}
 
 	_, _, err = client.Collection(snippetCollectionName).Add(ctx, map[string]interface{}{
 		"id":      newSnippet.Id,
+		"name":    newSnippet.Name,
 		"tagIds":  newSnippet.TagIds,
 		"content": newSnippet.Content,
 	})
@@ -98,6 +100,7 @@ func (r *firestoreSnippetRepo) FindByTag(tagName string) ([]entity.SnippetFirest
 
 		snippet := entity.SnippetFirestore{
 			Id:      doc.Data()["id"].(int64),
+			Name:    doc.Data()["name"].(string),
 			Content: doc.Data()["content"].(string),
 			TagIds:  nil,
 		}
