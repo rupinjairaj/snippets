@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/rupinjairaj/snippet/controller"
 	"github.com/rupinjairaj/snippet/repository"
 	"github.com/rupinjairaj/snippet/service"
@@ -18,8 +20,10 @@ var (
 )
 
 func main() {
-
-	const port string = ":9000"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":9000"
+	}
 
 	httpRouter.Get("/snippet", snippetController.GetSnippets)
 	httpRouter.Post("/snippet", snippetController.AddSnippet)
