@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/rupinjairaj/snippet/entity"
 	"github.com/rupinjairaj/snippet/errors"
@@ -28,16 +29,10 @@ func NewSnippetController(snippetServ service.SnippetService) SnippetController 
 func (sc *snippetCtrl) GetSnippets(response http.ResponseWriter, request *http.Request) {
 
 	response.Header().Set("Content-Type", "application/json")
-	var tag entity.TagClient
-	err := json.NewDecoder(request.Body).Decode(&tag)
-	if err != nil {
-		log.Printf("Failed to decode input tag name in request body")
-		response.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(response).Encode(errors.ServiceError{Message: "Error getting the tag name"})
-		return
-	}
 
-	snippets, err := sc.snippetSer.FindByTag(tag.Name)
+	tagName := strings.TrimPrefix(request.URL.Path, "/snippet/")
+
+	snippets, err := sc.snippetSer.FindByTag(tagName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(response).Encode(errors.ServiceError{Message: "Error getting the snippets"})

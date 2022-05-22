@@ -25,7 +25,7 @@ func main() {
 		port = ":9000"
 	}
 
-	httpRouter.Get("/snippet", snippetController.GetSnippets)
+	httpRouter.Get("/snippet/{tagName}", snippetController.GetSnippets)
 	httpRouter.Post("/snippet", snippetController.AddSnippet)
 	httpRouter.Get("/tag", tagController.GetTags)
 	httpRouter.Post("/tag", tagController.AddTag)

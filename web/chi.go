@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 )
 
 type chiRouter struct {
@@ -12,8 +13,15 @@ type chiRouter struct {
 }
 
 func NewChiRouter() Router {
+	router := chi.NewRouter()
+	router.Use(
+		cors.Handler(cors.Options{
+			AllowOriginFunc: AllowOriginFunc,
+			AllowedMethods:  []string{"GET", "POST"},
+			AllowedHeaders:  []string{"*"},
+		}))
 	return &chiRouter{
-		chiDispatcher: chi.NewRouter(),
+		chiDispatcher: router,
 	}
 }
 
@@ -23,6 +31,10 @@ func (c *chiRouter) Get(uri string, f func(response http.ResponseWriter, request
 
 func (c *chiRouter) Post(uri string, f func(response http.ResponseWriter, request *http.Request)) {
 	c.chiDispatcher.Post(uri, f)
+}
+
+func AllowOriginFunc(request *http.Request, origin string) bool {
+	return true
 }
 
 func (c *chiRouter) Serve(port string) {

@@ -5,6 +5,7 @@ go 1.18
 require (
 	cloud.google.com/go/firestore v1.6.1
 	github.com/go-chi/chi v1.5.4
+	github.com/go-chi/cors v1.2.1
 	google.golang.org/api v0.59.0
 )
 
