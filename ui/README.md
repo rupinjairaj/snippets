@@ -1,4 +1,4 @@
-# Code Share UI
+# Snippets UI
 
 ## Available Scripts
 In the project directory, you can run:
