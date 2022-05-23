@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	tagRepository     repository.TagRepository     = repository.NewFirestoreTagRepo()
-	snippetRepository repository.SnippetRepository = repository.NewFirestoreSnippetRepo(tagRepository)
+	uuid              repository.UUID              = repository.NewUUIDGen()
+	tagRepository     repository.TagRepository     = repository.NewFirestoreTagRepo(uuid)
+	snippetRepository repository.SnippetRepository = repository.NewFirestoreSnippetRepo(tagRepository, uuid)
 	tagService        service.TagService           = service.NewTagService(tagRepository)
 	snippetService    service.SnippetService       = service.NewSnippetService(snippetRepository)
 	snippetController controller.SnippetController = controller.NewSnippetController(snippetService)

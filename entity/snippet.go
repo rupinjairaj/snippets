@@ -1,7 +1,7 @@
 package entity
 
 type SnippetFirestore struct {
-	Id      int64    `json:"id"`
+	Id      string   `json:"id"`
 	Name    string   `json:"name"`
 	TagIds  []string `json:"tagIds"`
 	Content string   `json:"content"`
