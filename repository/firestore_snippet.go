@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"log"
-	"math/rand"
 
 	"cloud.google.com/go/firestore"
 	"github.com/rupinjairaj/snippet/entity"
@@ -12,12 +12,14 @@ import (
 
 type firestoreSnippetRepo struct {
 	tagRepo TagRepository
+	uuidGen UUID
 }
 
-func NewFirestoreSnippetRepo(firestoreTagRepo TagRepository) SnippetRepository {
+func NewFirestoreSnippetRepo(firestoreTagRepo TagRepository, ug UUID) SnippetRepository {
 
 	return &firestoreSnippetRepo{
 		tagRepo: firestoreTagRepo,
+		uuidGen: ug,
 	}
 }
 
@@ -43,8 +45,14 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 		tagIds = append(tagIds, tag.Id)
 	}
 
+	id, err := r.uuidGen.GenerateUUID()
+	if err != nil {
+		log.Printf("Failed to generate UUID.")
+		return nil, errors.New("Internal error occurred. Retry again.")
+	}
+
 	newSnippet := &entity.SnippetFirestore{
-		Id:      rand.Int63(),
+		Id:      id,
 		Name:    snippet.Name,
 		TagIds:  tagIds,
 		Content: snippet.Content,
@@ -99,7 +107,7 @@ func (r *firestoreSnippetRepo) FindByTag(tagName string) ([]entity.SnippetFirest
 		}
 
 		snippet := entity.SnippetFirestore{
-			Id:      doc.Data()["id"].(int64),
+			Id:      doc.Data()["id"].(string),
 			Name:    doc.Data()["name"].(string),
 			Content: doc.Data()["content"].(string),
 			TagIds:  nil,

@@ -2,19 +2,22 @@ package repository
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log"
-	"math/rand"
 
 	"cloud.google.com/go/firestore"
 	"github.com/rupinjairaj/snippet/entity"
 	"google.golang.org/api/iterator"
 )
 
-type firestoreTagRepo struct{}
+type firestoreTagRepo struct {
+	uuidGen UUID
+}
 
-func NewFirestoreTagRepo() TagRepository {
-	return &firestoreTagRepo{}
+func NewFirestoreTagRepo(ug UUID) TagRepository {
+	return &firestoreTagRepo{
+		uuidGen: ug,
+	}
 }
 
 func (r *firestoreTagRepo) Save(tagName string) (*entity.Tag, error) {
@@ -38,8 +41,14 @@ func (r *firestoreTagRepo) Save(tagName string) (*entity.Tag, error) {
 		return tag, nil
 	}
 
+	uuid, err := r.uuidGen.GenerateUUID()
+	if err != nil {
+		log.Printf("Failed to generate UUID.")
+		return nil, errors.New("Internal error occurred. Retry again.")
+	}
+
 	tag = &entity.Tag{
-		Id:   fmt.Sprint(rand.Int63()),
+		Id:   uuid,
 		Name: tagName,
 	}
 	_, _, err = client.Collection(tagsCollectionName).Add(ctx, map[string]interface{}{

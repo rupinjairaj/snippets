@@ -11,6 +11,7 @@ env/*
 
 # production
 */build
+/cmd/snippet
 
 # misc
 .DS_Store
