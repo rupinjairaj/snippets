@@ -39,5 +39,5 @@ func main() {
 	httpRouter.Post("/snippet", snippetController.AddSnippet)
 	httpRouter.Get("/tag", tagController.GetTags)
 	httpRouter.Post("/tag", tagController.AddTag)
-	httpRouter.Serve(port)
+	httpRouter.Serve(":" + port)
 }
