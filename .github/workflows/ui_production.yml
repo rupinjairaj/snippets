@@ -1,10 +1,10 @@
-name: UI Development workflow
+name: UI Production workflow
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - develop
+      - main
     paths:
       - ui/**
 
