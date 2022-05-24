@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -26,8 +27,9 @@ var (
 
 func main() {
 	port := os.Getenv("PORT")
+
 	if port == "" {
-		port = ":9000"
+		log.Fatal("$PORT must be set")
 	}
 
 	httpRouter.Get("/", func(response http.ResponseWriter, request *http.Request) {
