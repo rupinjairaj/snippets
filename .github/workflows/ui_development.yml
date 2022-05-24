@@ -16,18 +16,30 @@ jobs:
         working-directory: ui
 
     steps:
-      - name: Development Code
+      - name: Check out repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Use Node.js 16.x
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
-      - run: npm install
-      - run: npm run build
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: 'snippets-ui-develop'
-          heroku_email: 'jairaj.rupin@gmail.com'
-          appdir: 'ui/build'
+      - name: Heroku login credentials
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+            machine git.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+          EOF
+        env: 
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+      - name: Add Heroku remote
+        run: heroku git:remote --app $HEROKU_APP_NAME_UI_DEVELOP
+        env:
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_UI_DEVELOP }}
+      - name: Push to Heroku
+        run: git subtree push --prefix ui heroku master
