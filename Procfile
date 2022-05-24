@@ -1,1 +1,1 @@
-web: ./bin/snippet
+web: bin/snippet

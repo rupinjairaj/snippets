@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/rupinjairaj/snippet/controller"
 	"github.com/rupinjairaj/snippet/repository"
@@ -26,6 +30,9 @@ func main() {
 		port = ":9000"
 	}
 
+	httpRouter.Get("/", func(response http.ResponseWriter, request *http.Request) {
+		json.NewEncoder(response).Encode(fmt.Sprintf("Site is up and running, %v", time.Now()))
+	})
 	httpRouter.Get("/snippet/{tagName}", snippetController.GetSnippets)
 	httpRouter.Post("/snippet", snippetController.AddSnippet)
 	httpRouter.Get("/tag", tagController.GetTags)
