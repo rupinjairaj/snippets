@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import Prism from 'prismjs';
-import { faArrowLeft, faTags, faCode, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './SnippetView.css';
@@ -10,7 +10,7 @@ import './SnippetView.css';
 function SnippetView() {
 
     let params = useParams();
-    let history = useHistory();
+    // let history = useHistory();
 
     let [snippets, setSnippets] = useState([]);
 
@@ -24,17 +24,17 @@ function SnippetView() {
         fetch(`http://localhost:9000/snippet/${params.tagName}`)
             .then(response => response.json())
             .then(data => setSnippets(data))
-    }, []);
+    }, [params.tagName]);
 
-    function backClick(e) {
-        e.preventDefault();
-        history.push("/inbox");
-    }
+    // function backClick(e) {
+    //     e.preventDefault();
+    //     history.push("/inbox");
+    // }
 
-    let backIcon = <FontAwesomeIcon icon={faArrowLeft} />
+    // let backIcon = <FontAwesomeIcon icon={faArrowLeft} />
     let codeIcon = <FontAwesomeIcon icon={faCode} />
-    let upvoteIcon = <FontAwesomeIcon icon={faArrowUp} />
-    let downvoteIcon = <FontAwesomeIcon icon={faArrowDown} />
+    // let upvoteIcon = <FontAwesomeIcon icon={faArrowUp} />
+    // let downvoteIcon = <FontAwesomeIcon icon={faArrowDown} />
 
     return (
         <div className="row">
