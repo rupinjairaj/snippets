@@ -1,4 +1,4 @@
-name: Development workflow
+name: UI Development workflow
 
 on:
   push:
