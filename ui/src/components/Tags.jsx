@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { getURL, tagsPath } from "../settings/api";
 
 function Tags() {
 
@@ -15,9 +16,13 @@ function Tags() {
     }
 
     useEffect(() => {
-        fetch('http://localhost:9000/tag')
+        const url = getURL(window.location.hostname);
+        fetch(`${url + tagsPath}`)
             .then(response => response.json())
-            .then(data => setTags(data))
+            .then(data => {
+                if (data === null) data = [];
+                setTags(data)
+            })
     }, []);
 
     return (
@@ -32,11 +37,11 @@ function Tags() {
                                 <div className="row" >
                                     <div className="col-3">
                                         <b>{tag.name}</b>
-                                        <span style={{ marginLeft: "4px" }}
-                                            className="badge bg-primary rounded-pill">+{10}</span>
+                                        {/* <span style={{ marginLeft: "4px" }}
+                                            className="badge bg-primary rounded-pill">+{10}</span> */}
                                     </div>
                                     <div className="col-6">
-                                        <em>{"Some description"}</em>
+                                        {/* <em>{"Some description"}</em> */}
                                     </div>
                                 </div>
                             </li>

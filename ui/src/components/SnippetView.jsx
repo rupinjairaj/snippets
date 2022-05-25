@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import Prism from 'prismjs';
 import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getURL, snippetPath } from "../settings/api";
 
 import './SnippetView.css';
 
@@ -10,7 +11,6 @@ import './SnippetView.css';
 function SnippetView() {
 
     let params = useParams();
-    // let history = useHistory();
 
     let [snippets, setSnippets] = useState([]);
 
@@ -21,7 +21,8 @@ function SnippetView() {
     // css class that specifies the target highlight language 
     useEffect(() => {
         Prism.highlightAll();
-        fetch(`http://localhost:9000/snippet/${params.tagName}`)
+        const url = getURL(window.location.hostname)
+        fetch(`${url + snippetPath}/${params.tagName}`)
             .then(response => response.json())
             .then(data => setSnippets(data))
     }, [params.tagName]);
