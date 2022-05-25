@@ -32,7 +32,7 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	httpRouter.Get("/", func(response http.ResponseWriter, request *http.Request) {
+	httpRouter.Get("/health", func(response http.ResponseWriter, request *http.Request) {
 		json.NewEncoder(response).Encode(fmt.Sprintf("Site is up and running, %v", time.Now()))
 	})
 	httpRouter.Get("/snippet/{tagName}", snippetController.GetSnippets)
