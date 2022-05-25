@@ -33,4 +33,4 @@ jobs:
         env:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_WEB_DEV }}
       - name: Push to Heroku
-        run: git push heroku develop
+        run: git push heroku develop:master
