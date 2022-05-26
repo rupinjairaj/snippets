@@ -20,11 +20,14 @@ function SnippetView() {
     // html element and syntax highlight the code with using the 
     // css class that specifies the target highlight language 
     useEffect(() => {
-        Prism.highlightAll();
+        // Prism.highlightAll();
         const url = getURL(window.location.hostname)
         fetch(`${url + snippetPath}/${params.tagName}`)
             .then(response => response.json())
-            .then(data => setSnippets(data))
+            .then(data => {
+                setSnippets(data)
+                Prism.highlightAll();
+            })
     }, [params.tagName]);
 
     // function backClick(e) {
