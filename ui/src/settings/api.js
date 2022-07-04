@@ -9,7 +9,7 @@ export const tagsPath = "/tag"
 export const getURL = (hostname) => {
 
     if (hostname.includes("local")) {
-        return endpoints['local']
+        return endpoints['dev']
     }
     if (hostname.includes("prod")) {
         return endpoints['prod']
