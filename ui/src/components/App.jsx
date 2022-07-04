@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Header from './Header';
 import Navbar from './Navbar';
 import SnippetView from './SnippetView';
 import Tags from './Tags';
