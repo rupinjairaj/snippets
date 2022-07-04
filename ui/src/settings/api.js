@@ -7,7 +7,6 @@ export const snippetPath = "/snippet"
 export const tagsPath = "/tag"
 
 export const getURL = (hostname) => {
-
     if (hostname.includes("local")) {
         return endpoints['local']
     }

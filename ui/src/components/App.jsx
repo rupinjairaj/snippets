@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Header from './Header';
-import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 import SnippetView from './SnippetView';
 import Tags from './Tags';
 
@@ -14,12 +13,13 @@ import Tags from './Tags';
 function App() {
   return (
     <div>
-      <Header />
       <div style={{ marginBottom: "2px" }}></div>
       <div style={{ marginLeft: "10px" }}>
+        <div style={{ marginBottom: "12px" }} className="row">
+          <Navbar />
+        </div>
         <div className="row">
-          <div className="col-2 bg-light">
-            <Sidebar />
+          <div className="col-1">
           </div >
           <div className="col-10">
             <Switch>
@@ -32,6 +32,8 @@ function App() {
               {/* <Route path="/topics" component={Topics} /> */}
               {/* <Route path="/people" component={People} /> */}
             </Switch>
+          </div>
+          <div style={{ marginTop: "12px" }} className="row">
           </div>
         </div >
       </div >
