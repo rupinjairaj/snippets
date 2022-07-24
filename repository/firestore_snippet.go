@@ -34,6 +34,7 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 	defer client.Close()
 
 	var tagIds []string
+	var tags []entity.Tag
 
 	for _, tagName := range snippet.Tags {
 		tag, err := r.tagRepo.Save(tagName)
@@ -42,6 +43,7 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 			return nil, err
 		}
 
+		tags = append(tags, *tag)
 		tagIds = append(tagIds, tag.Id)
 	}
 
@@ -58,22 +60,29 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 		Content: snippet.Content,
 	}
 
-	_, _, err = client.Collection(snippetCollectionName).Add(ctx, map[string]interface{}{
+	_, err = client.Collection(snippetCollectionName).Doc(newSnippet.Name).Set(ctx, map[string]interface{}{
 		"id":      newSnippet.Id,
 		"name":    newSnippet.Name,
 		"tagIds":  newSnippet.TagIds,
 		"content": newSnippet.Content,
 	})
+
 	if err != nil {
-		log.Printf("Failed to add a new tag: %v\n", err)
+		log.Printf("Failed to insert the snippet: %v\n", err)
 		return nil, err
+	}
+
+	for _, tag := range tags {
+		err = r.tagRepo.UpdateTag(&tag)
+		if err != nil {
+			log.Printf("Failed to update count for tag %s: %v\n", tag.Name, err)
+		}
 	}
 
 	return newSnippet, nil
 }
 
 func (r *firestoreSnippetRepo) FindByTag(tagName string) ([]entity.SnippetFirestore, error) {
-
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
 	if err != nil {
@@ -90,7 +99,7 @@ func (r *firestoreSnippetRepo) FindByTag(tagName string) ([]entity.SnippetFirest
 		return nil, err
 	}
 
-	q := client.Collection(snippetCollectionName).Where("tagIds", "array-contains", tag.Id)
+	q := client.Collection(snippetCollectionName).Where("tagIds", "array-contains", tag.Name)
 	iter := q.Documents(ctx)
 
 	for {
