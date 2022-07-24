@@ -118,8 +118,9 @@ func (r *firestoreTagRepo) FindAll() ([]entity.Tag, error) {
 		}
 
 		tag := entity.Tag{
-			Id:   doc.Data()["id"].(string),
-			Name: doc.Data()["name"].(string),
+			Id:    doc.Data()["id"].(string),
+			Name:  doc.Data()["name"].(string),
+			Count: doc.Data()["count"].(int64),
 		}
 
 		tags = append(tags, tag)

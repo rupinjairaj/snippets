@@ -31,20 +31,25 @@ function Tags() {
                 {tags.length !== 0 &&
                     tags.map((tag) => {
                         return (
-                            <li className="list-group-item list-group-item-action"
+                            <li className="list-group-item d-flex justify-content-between align-items-center"
                                 key={tag.id}
                                 onClick={(e) => inboxItemClickHandler(tag.name, e)}>
-                                <div className="row" >
-                                    <div className="col-3">
-                                        <b>{tag.name}</b>
-                                        {/* <span style={{ marginLeft: "4px" }}
-                                            className="badge bg-primary rounded-pill">+{10}</span> */}
-                                    </div>
-                                    <div className="col-6">
-                                        {/* <em>{"Some description"}</em> */}
-                                    </div>
-                                </div>
+                                <b>{tag.name}</b>
+                                {/* <span class="badge bg-primary rounded-pill">14</span> */}
+                                <span class="badge rounded-pill bg-light text-dark">{tag.count}</span>
                             </li>
+                            // <li className="list-group-item list-group-item-action"
+                            //     key={tag.id}
+                            //     onClick={(e) => inboxItemClickHandler(tag.name, e)}>
+                            //     <div className="row">
+                            //         <div className="col-1">
+                            //             <span class="badge rounded-pill bg-light text-dark">{tag.count}</span>
+                            //         </div>
+                            //         <div className="col-3">
+                            //             <b>{tag.name}</b>
+                            //         </div>
+                            //     </div>
+                            // </li>
                         )
                     })
                 }
