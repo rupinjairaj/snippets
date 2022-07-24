@@ -8,6 +8,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/rupinjairaj/snippet/entity"
 	"google.golang.org/api/iterator"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type firestoreTagRepo struct {
@@ -48,12 +50,14 @@ func (r *firestoreTagRepo) Save(tagName string) (*entity.Tag, error) {
 	}
 
 	tag = &entity.Tag{
-		Id:   uuid,
-		Name: tagName,
+		Id:    uuid,
+		Name:  tagName,
+		Count: 0,
 	}
-	_, _, err = client.Collection(tagsCollectionName).Add(ctx, map[string]interface{}{
-		"id":   tag.Id,
-		"name": tag.Name,
+	_, err = client.Collection(tagsCollectionName).Doc(tag.Name).Set(ctx, map[string]interface{}{
+		"id":    tag.Id,
+		"name":  tag.Name,
+		"count": tag.Count,
 	})
 	if err != nil {
 		log.Printf("Failed to add a new tag: %v\n", err)
@@ -73,17 +77,16 @@ func (r *firestoreTagRepo) FindByName(tagName string) (*entity.Tag, error) {
 	}
 	defer client.Close()
 
-	q := client.Collection(tagsCollectionName).Select("id").Where("name", "==", tagName)
-	doc, err := q.Documents(ctx).Next()
-
-	if err != nil && err == iterator.Done {
-		log.Printf("tag not found: %v\n", err)
+	doc, err := client.Collection(tagsCollectionName).Doc(tagName).Get(ctx)
+	if err != nil && status.Code(err) == codes.NotFound {
+		log.Printf("No document found with '%s' tagName\n", tagName)
 		return nil, nil
 	}
 
 	tag := entity.Tag{
-		Id:   doc.Data()["id"].(string),
-		Name: tagName,
+		Id:    doc.Data()["id"].(string),
+		Name:  doc.Data()["name"].(string),
+		Count: doc.Data()["count"].(int64),
 	}
 
 	return &tag, nil
@@ -123,4 +126,27 @@ func (r *firestoreTagRepo) FindAll() ([]entity.Tag, error) {
 	}
 
 	return tags, nil
+}
+
+func (r *firestoreTagRepo) UpdateTag(tag *entity.Tag) error {
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, projectId)
+	if err != nil {
+		log.Printf("Failed to create a firestore client: %v\n", err)
+		return err
+	}
+	defer client.Close()
+
+	_, err = client.Collection(tagsCollectionName).Doc(tag.Name).Update(ctx, []firestore.Update{
+		{
+			Path:  "count",
+			Value: tag.Count + 1,
+		},
+	})
+	if err != nil {
+		log.Printf("Failed to update tag count: %v\n", err)
+		return err
+	}
+
+	return nil
 }
