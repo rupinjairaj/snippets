@@ -44,7 +44,7 @@ func (r *firestoreSnippetRepo) Save(snippet *entity.SnippetClient) (*entity.Snip
 		}
 
 		tags = append(tags, *tag)
-		tagIds = append(tagIds, tag.Id)
+		tagIds = append(tagIds, tag.Name)
 	}
 
 	id, err := r.uuidGen.GenerateUUID()
