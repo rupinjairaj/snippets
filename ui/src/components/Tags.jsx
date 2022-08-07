@@ -36,7 +36,7 @@ function Tags() {
                                 onClick={(e) => inboxItemClickHandler(tag.name, e)}>
                                 <b>{tag.name}</b>
                                 {/* <span class="badge bg-primary rounded-pill">14</span> */}
-                                <span class="badge rounded-pill bg-light text-dark">{tag.count}</span>
+                                <span className="badge rounded-pill bg-light text-dark">{tag.count}</span>
                             </li>
                             // <li className="list-group-item list-group-item-action"
                             //     key={tag.id}
