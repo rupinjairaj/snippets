@@ -5,6 +5,7 @@ export const endpoints = {
 }
 export const snippetPath = "/snippet"
 export const tagsPath = "/tag"
+export const login = "/login/github"
 
 export const getURL = (hostname) => {
     if (hostname.includes("local")) {
