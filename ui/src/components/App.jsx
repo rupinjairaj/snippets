@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Publish from './Publish';
 
 import Navbar from './Navbar';
 import SnippetView from './SnippetView';
@@ -26,8 +27,8 @@ function App() {
               <Route path="/" component={Tags} exact />
               <Route path="/tags" component={Tags} />
               <Route path="/snippetView/:tagName" children={<SnippetView />} />
+              <Route path="/publish" component={Publish} />
               {/* Uncomment these as you continue to build them one by one. */}
-              {/* <Route path="/sent" component={Sent} /> */}
               {/* <Route path="/trending" component={Trending} /> */}
               {/* <Route path="/topics" component={Topics} /> */}
               {/* <Route path="/people" component={People} /> */}
