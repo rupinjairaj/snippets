@@ -2,7 +2,9 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 import { faTags, faCode } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getURL, login } from '../settings/api';
 
 function Navbar() {
 
@@ -10,7 +12,7 @@ function Navbar() {
     // let sentIcon = <FontAwesomeIcon icon={faPaperPlane} />
     // let trendIcon = <FontAwesomeIcon icon={faBolt} />
     let tagIcon = <FontAwesomeIcon icon={faTags} />
-    // let peopleIcon = <FontAwesomeIcon icon={faUser} />
+    let githubIcon = <FontAwesomeIcon icon={faGithub} />
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,6 +39,9 @@ function Navbar() {
                             <NavLink className="nav-link" to="/people">{peopleIcon} People</NavLink>
                         </li> */}
                     </ul>
+                    {/* <div className="d-flex" role="search">
+                        <a className="btn btn-outline-dark" href={getURL(window.location.hostname) + login}>{githubIcon}</a>
+                    </div> */}
                 </div>
             </div>
         </nav>
